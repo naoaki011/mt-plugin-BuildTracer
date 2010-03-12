@@ -16,7 +16,7 @@ and shows how long each tag takes to publish in an individual template.
 
  * 0.5 works with MT 4.3.
  * 0.4 works with MT 4.2?
- * 0.31 works with MT 4.1.
+ * 0.3.1 works with MT 4.1.
 
 ## Installation
 
