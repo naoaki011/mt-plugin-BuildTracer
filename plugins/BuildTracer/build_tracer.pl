@@ -6,12 +6,13 @@ use strict;
 use MT;
 use MT::Template::Context;
 use MT::Plugin;
-use MT::Util qw( is_valid_url decode_url );
+use MT::Util qw( is_valid_url decode_url encode_html );
+use MT::I18N qw( substr_text length_text );
 @MT::Plugin::BuildTracer::ISA = qw(MT::Plugin);
 
 use vars qw($PLUGIN_NAME $VERSION);
 $PLUGIN_NAME = 'BuildTracer';
-$VERSION = '0.1';
+$VERSION = '0.3';
 my $plugin = new MT::Plugin::BuildTracer({
     name => $PLUGIN_NAME,
     version => $VERSION,
@@ -52,6 +53,9 @@ sub init_registry {
     };
 
     $plugin->registry({
+        config_settings => {
+            'BuildTracerDebugMode' => { default => 0, },
+        },
         applications => {
             cms => {
                 menus   => $menus,
@@ -193,11 +197,11 @@ sub build_log {
     if ('HASH' ne ref $log) {
         $log = { 'type' => $log };
     }
-    diff_vars($ctx);
     my $vars = $ctx->{__stash}{vars};
     foreach my $v (keys %$vars){
         $VAR_STOCK{$v} = { 'var_name' => $v };
     }
+    diff_vars($ctx);
 
     diff_stash($ctx);
     my $stash = $ctx->{__stash};
@@ -210,26 +214,29 @@ sub build_log {
 
 sub diff_vars {
     my $ctx = shift;
-    my (@new_vars, @changed_vars, @gone_vars);
+    my (@diffs);
     my $vars = $ctx->{__stash}{vars};
-    foreach my $v (@TRACE_VARS) {
+    foreach my $v (keys(%VAR_STOCK)) {
         if( exists $LAST_VAR{$v} ) {
             my $old = $LAST_VAR{$v};
             if ( exists $vars->{$v} ) {
                 my $new = $vars->{$v};
+                $new = $new          ? $new
+                     : defined($new) ? '0'
+                     :                 'undef';
                 if ($old ne $new) {
-                    push @changed_vars, {
-                        varname => $v,
-                        old     => $old,
-                        new     => $new,
+                    push @diffs, {
+                        name  => $v,
+                        exist => 1,
+                        val   => $new,
                     };
                     $LAST_VAR{$v} = $new;
                 }
             }
             else {
-                push @gone_vars, {
-                    varname => $v,
-                    old     => $old,
+                push @diffs, {
+                    name  => $v,
+                    exist => 0,
                 };
                 delete $LAST_VAR{$v};
             }
@@ -237,21 +244,23 @@ sub diff_vars {
         else {
             if ( exists $vars->{$v} ) {
                 my $new = $vars->{$v};
-                push @new_vars, {
-                    varname => $v,
-                    new     => $new,
+                $new = $new          ? $new
+                     : defined($new) ? '0'
+                     :                 'undef';
+                push @diffs, {
+                    name  => $v,
+                    exist => 1,
+                    val   => $new,
                 };
                 $LAST_VAR{$v} = $new;
             }
         } 
     }
 
-    if ( scalar @new_vars || scalar @changed_vars || scalar @gone_vars ) {
+    if ( scalar @diffs ) {
         push @BUILD_LOG, { 
-            'type'         => 'diff_vars',
-            'new_vars'     => \@new_vars,
-            'changed_vars' => \@changed_vars,
-            'gone_vars'    => \@gone_vars,
+            'type'     => 'diff_vars',
+            'diff'     => \@diffs,
         };
     }
 }
@@ -312,8 +321,8 @@ sub psuedo_builder {
     if ((!defined $START_TIME) && $TIMING) {
         $START_TIME = [ Time::HiRes::gettimeofday() ];
     }
-
-    build_log($ctx, { 'type' => 'enter_build', 'depth' => $DEPTH } );
+    my $begin_block_log = { 'type' => 'enter_build', 'depth' => $DEPTH };
+    build_log( $ctx, $begin_block_log );
     $DEPTH++;
     #print STDERR syntree2str($tokens,0) unless $count++ == 1;
 
@@ -480,7 +489,14 @@ sub psuedo_builder {
                 $out = $ph->($ctx, \%args, $out, \@args)
                     if %args && $ph;
                 $post_handle_log->{out} = $pre_handle_log->{error} ? $err : $out;
+                my $trimed_out = $post_handle_log->{out};
+                if (40 < length_text($trimed_out)) {
+                    $trimed_out = substr_text($trimed_out, 0, 40) . '...';
+                }
+                $post_handle_log->{trimed_out} = $trimed_out;
                 build_log($ctx, $post_handle_log);
+                $post_handle_log->{ 'pair_id' } = $pre_handle_log->{ 'id' };
+                $pre_handle_log->{ 'pair_id' } = $post_handle_log->{ 'id' };
                 $res .= $out
                     if defined $out;
                 if ($MT::DebugMode & 8) {
@@ -507,7 +523,10 @@ sub psuedo_builder {
         }
     }
     $DEPTH--;
-    build_log($ctx, 'exit_build');
+    my $end_block_log = { 'type' => 'exit_build' };
+    build_log( $ctx, $end_block_log );
+    $end_block_log->{ 'pair_id' } = $begin_block_log->{ 'id' };
+    $begin_block_log->{ 'pair_id' } = $end_block_log->{ 'id' };
     $TOTAL_TIME = sprintf("%f", Time::HiRes::tv_interval($START_TIME))
         if $TIMING;
     
@@ -533,8 +552,8 @@ sub trace {
     }
 
     eval {require Time::HiRes; };
-    my $can_timing = $@ ? 0 : 1;
-    $TIMING = $app->param('timing') && $can_timing;
+    $TIMING = $@ ? 0 : 1;
+    #$TIMING = $app->param('timing') && $can_timing;
     @TRACE_VARS = $app->param('trace_vars');
     @TRACE_STASH = $app->param('trace_stash');
 
@@ -560,6 +579,28 @@ sub trace {
     my $ft = MT::Template->load({ 'id' => $fi->template_id });
     $tmpl->param('build_log' => \@BUILD_LOG);
     $tmpl->param('lines' => @BUILD_LOG);
+    my $encoder;
+    $encoder = sub {
+        my $node = shift;
+        if (ref $$node eq 'ARRAY') {
+            foreach (@$$node) {
+                $encoder->(\$_);
+            }
+        }
+        elsif (ref $$node eq 'HASH') {
+            foreach (values %$$node) {
+                $encoder->(\$_);
+            }
+        }
+        else {
+            $$node = MT::Util::encode_html($$node, 1);
+        }
+    };
+
+    $encoder->(\$_) for @BUILD_LOG;
+    use JSON;
+    my $log_json = JSON::objToJson(\@BUILD_LOG, {skipinvalid => 1});
+    $tmpl->param('log_json' => $log_json );
     foreach my $v (@TRACE_VARS) {
         $VAR_STOCK{$v}->{stocked} = 1;
     }
@@ -574,12 +615,13 @@ sub trace {
     $tmpl->param('tmpl_type' => $ft->type );
     $tmpl->param('fi_at' => $fi->archive_type );
     $tmpl->param('fi_url' => $fi->url );
-    $tmpl->param('can_timing' => $can_timing);
+   # $tmpl->param('can_timing' => $can_timing);
     $tmpl->param('timing' => $TIMING);
     $tmpl->param('total_time' => $TOTAL_TIME);
     $tmpl->param('id' => $fi_id );
     $tmpl->param('blog_id' => $blog_id);
     $tmpl->param('error' => $error);
+    $tmpl->param('buildtracer_debug' => $app->config('BuildTracerDebugMode'));
     return $app->build_page($tmpl);
 }
 
