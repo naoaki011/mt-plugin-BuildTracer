@@ -1,0 +1,27 @@
+0.4
+
+0.5
+
+0.31 (2008-02-24)
+
+    * fixed the fault about JSON with IE7
+    * new feature, the autorun added.
+    * displaying array and hash in JSON in the array table.
+    * fix some look and feel of buttons.
+    * displaying the forgotten bookmarklet link.
+    * (inside) cache to trace the vars
+    * (inside) source codes were parted to smaller files.
+
+0.3 (2008-02-17)
+
+    * comes new interface
+    * backstep some functions (ex. stash watcher has removed)
+
+0.2 (2008-02-11)
+
+    * fix a problem about ovatwriting an existing blog files at trace
+    * be able to wathing "stash"
+
+0.1 (2008-02-04)
+
+    * first release
