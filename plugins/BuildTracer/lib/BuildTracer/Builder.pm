@@ -98,22 +98,22 @@ sub diff_vars {
                 };
                 $LAST_VAR{$v} = $new;
             }
-        } 
+        }
     }
 
     if ( scalar @diffs ) {
-        push @BUILD_LOG, { 
+        push @BUILD_LOG, {
             'type'     => 'diff_vars',
             'diff'     => \@diffs,
         };
     }
 }
 
-#base on MT::Builder::build. taken from MTOS4.1 stable. 
+#base on MT::Builder::build. taken from MTOS4.1 stable.
 sub psuedo_builder {
     my $build = shift;
     my($ctx, $tokens, $cond) = @_;
-    
+
     if ((!defined $START_TIME) && $TIMING) {
         $START_TIME = [ Time::HiRes::gettimeofday() ];
     }
@@ -325,7 +325,7 @@ sub psuedo_builder {
     $begin_block_log->{ 'pair_id' } = $end_block_log->{ 'id' };
     $TOTAL_TIME = sprintf("%f", Time::HiRes::tv_interval($START_TIME))
         if $TIMING;
-    
+
     return $res;
 }
 

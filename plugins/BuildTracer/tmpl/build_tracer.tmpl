@@ -3,7 +3,7 @@
 <script type="text/javascript" src="<$mt:var name="static_uri"$>plugins/BuildTracer/js/build_tracer.js"></script>
 <script type="text/javascript">
 var BUILD_LOG = <mt:var log_json>;
-var TIMING = <mt:var timing>; 
+var TIMING = <mt:var timing>;
 
 TC.attachLoadEvent( function() {
     print_tracer(BUILD_LOG);
@@ -37,7 +37,7 @@ TC.attachLoadEvent( function() {
             <tr><th>type</th><td><mt:var fi_at></td></tr>
             <tr><th><__trans phrase="template"></th>
                 <td><a href="<mtapp:link mode="view" type="template" id="$tmpl_id" blog_id="$blog_id">"><mt:var tmpl_name></a>( <mt:var tmpl_type> )</td></tr>
-        
+
             <mt:if timing>
                 <tr><th>build time</th>
                     <td><mt:var total_time> sec</td></tr>

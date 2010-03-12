@@ -44,7 +44,7 @@ sub list_fileinfo {
             'url' => $fi->url,
         };
     }
-    
+
     my @data;
     my $total;
     my $key_tmpl_name;
@@ -92,15 +92,15 @@ sub list_fileinfo {
 
     my @individuals = MT::Template->load({
         blog_id => $blog_id,
-        type    => 'individual', 
+        type    => 'individual',
     });
     my @pages = MT::Template->load({
         blog_id => $blog_id,
-        type    => 'page', 
+        type    => 'page',
     });
     my @archives = MT::Template->load({
         blog_id => $blog_id,
-        type    => 'archive', 
+        type    => 'archive',
     });
 
     my $page_tmpl = $plugin->load_tmpl('list_fileinfo.tmpl');

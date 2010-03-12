@@ -34,7 +34,7 @@ MT->add_plugin($plugin);
 sub instance { $plugin; }
 
 sub doLog {
-    my ($msg) = @_; 
+    my ($msg) = @_;
     return unless defined($msg);
 
     use MT::Log;
