@@ -1,0 +1,206 @@
+<mt:setvarblock name="page_title"><__trans phrase="Build Tracer: "><mt:var fi_url></mt:setvarblock>
+<mt:setvarblock name="html_head" prepend="1">
+<style type="text/css">
+#tracer-wrapper {
+    border-width: 0 1px 1px 0;
+    border-style: solid;
+    border-color: #bb9;
+    margin: 0 0 12px 0;
+    overflow: hidden;
+}
+
+.build-log-element {
+    border-width: 1px 0 0 1px;
+    border-style: solid;
+    border-color: #b99;
+    background-color: #fff;
+}
+
+.build-log-element-nest {
+    border-width: 1px 0 0 1px;
+    border-style: solid;
+    border-color: #b99;
+    margin-left: 20px;
+    background-color: #fff;
+}
+
+.plain-text { color: #aaa; background-color: #fff; margin-left: 6px;}
+.block-tag { background-color: #ccf; border-bottom: 1px solid #fff;}
+.function-tag { background-color: #beb; border-bottom: 1px solid #fff;}
+
+.tag-name { color: #944; font-weight: bold; margin: 0 3px 0 6px;}
+.tag-args { color: #480; margin: 0 3px;}
+.function-output {color: #269; font-style: italic; margin: 0 3px;}
+.error { background-color: #f44;}
+
+.tokens {background-color: #77f; padding: 5px 0 0 0;}
+.tokens-else {background-color: #f77; padding: 5px 0 0 0;}
+.new-vars {color: #66c;}
+.changed-vars {color: #282;}
+.gone-vars {color: #c66;}
+.diff-vars {background-color: #ddb; border-bottom: 1px solid #fff; }
+.diff-vars ul { margin: 0; }
+.diff-vars ul li {display: inline; margin: 0 6px 0 6px; }
+.diff-value {color: #468; font-style: italic; }
+.time-elapsed {
+    font-size: 0.8em;
+    background-color: #fc8;
+    border: 1px solid #888;
+    padding: 0 3px 0 3px;
+    color: #888;
+}
+
+div.legend-box { margin: 0; padding: 0 10px 0 0; display: inline; min-width: 16px; }
+div.legend-line { margin: 0; padding: 0 10px 0 0; }
+
+</style>
+</mt:setvarblock>
+<mt:setvarblock name="related_content">
+    <mtapp:widget
+        id="file_info"
+        label="<__trans phrase="file info">">
+        <dl>
+            <dt>type</dt><dd><mt:var fi_at></dd>
+            <dt><__trans phrase="template"></dt>
+            <dd><a href="<mtapp:link mode="view" type="template" id="$tmpl_id" blog_id="$blog_id">"><mt:var tmpl_name></a>( <mt:var tmpl_type> )</dd>
+        
+        </dl>
+    </mtapp:widget>
+
+    <mtapp:widget
+        id="trace_vars"
+        label="<__trans phrase="Trace Vars">">
+    <form name="cfg_form" method="post" action="<mt:var name="script_url">">
+        <input type="hidden" name="url" value="<mt:var name="fi_url">" />
+        <input type="hidden" name="__mode" value="build_tracer" />
+        <input type="hidden" name="blog_id" value="<mt:var blog_id>" />
+        <ul>
+            <mt:loop varstock>
+                <li><label for="trace_vars"><input type="checkbox" name="trace_vars" value="<mt:var var_name>" <mt:if stocked>checked="checked" </mt:if>/><mt:var var_name></label></li>
+            </mt:loop>
+        </ul>
+    </mtapp:widget>
+
+    <mtapp:widget
+        id="options"
+        label="<__trans phrase="Options">">
+        <ul>
+        <mt:if can_timing>
+            <li><input type="checkbox" name="timing" value="1"<mt:if timing> checked="checked"</mt:if> /><label for="timing">show proccess time</label></li>
+        <mt:else>
+            <li><__trans phrase="cannot time: Time::HiRes required"></li>
+        </mt:if>
+        </ul>
+        <input type="submit">
+    </form>
+    </mtapp:widget>
+
+    <mtapp:widget
+        id="legend"
+        label="<__trans phrase="legend">">
+        <ul>
+            <li><div class="legend-box block-tag">&nbsp;</div><__trans phrase="block tag"></li>
+            <li><div class="legend-line block-tag"><span class="tag-name"><__trans phrase="tag name"></span></div></li>
+            <li><div class="legend-line block-tag"><span class="tag-args"><__trans phrase="modifiers"></span></div></li>
+            <li><div class="legend-box function-tag">&nbsp;</div><__trans phrase="function tag"></li>
+            <li><div class="legend-line function-tag"><span class="tag-name"><__trans phrase="tag name"></span></div></li>
+            <li><div class="legend-line function-tag"><span class="tag-args"><__trans phrase="modifiers"></span></div></li>
+            <li><div class="legend-line function-tag"><span class="function-output"><__trans phrase="output"></span></div></li>
+            <li><span class="plain-text"><__trans phrase="plaintext"></span></li>
+            <li><div class="legend-box tokens">&nbsp;</div><__trans phrase="tokens"></li>
+            <li><div class="legend-box tokens-else">&nbsp;</div><__trans phrase="tokens-else"></li>
+            <li><div class="diff-vars legend-line"><span class="new-vars"><__trans phrase="new var"></span></div></li>
+            <li><div class="diff-vars legend-line"><span class="changed-vars"><__trans phrase="changed var"></span></div></li>
+            <li><div class="diff-vars legend-line"><span class="gone-vars"><__trans phrase="vanished vars"></span></div></li>
+            <li><div class="time-elapsed legend-line"><__trans phrase="tag proc time / total time (sec)"></div></li>
+            <li><div class="build-log-element"><__trans phrase="build block"><div class="build-log-element-nest"><__trans phrase="nested build"></div></div></li>
+        </ul>
+    </mtapp:widget>
+
+    <mtapp:widget
+        id="bookmarklet"
+        label="<__trans phrase="Bookmarklet">">
+    <a href="javascript:window.location='<mt:AdminCGIPath><mt:AdminScript>?__mode=build_tracer&blog_id=<mt:var blog_id>&url=' + (location.href);">bookmarklet</a>
+    </mtapp:widget>
+</mt:setvarblock>
+
+<mt:include name="include/header.tmpl">
+<mt:ignore>
+<mt:var name="fileinfos_html">
+<pre><mt:var template_text encode_html="1"></pre>
+</mt:ignore>
+
+
+<mt:setvartemplate name="var_diff">
+    <mt:if new_vars>
+        <ul><mt:loop name="new_vars">
+            <li><span class="new-vars"><mt:var varname encode_html="1"> : (<span class="diff-value"><mt:var new encode_html="1"></span>)</span></li>
+        </mt:loop></ul>
+    </mt:if>
+    <mt:if changed_vars>
+        <ul><mt:loop name="changed_vars">
+            <li><span class="changed-vars"><mt:var varname encode_html="1"> : (<span class="diff-value"><mt:var old encode_html="1"></span>) => (<span class="diff-value"><mt:var new encode_html="1"></span>)</span></li>
+        </mt:loop></ul>
+    </mt:if>
+    <mt:if gone_vars>
+        <ul><mt:loop name="gone_vars">
+            <li><span class="gone-vars"><mt:var varname encode_html="1"> : (<span class="diff-value"><mt:var old encode_html="1"></span>)</span></li>
+        </mt:loop><ul>
+    </mt:if>
+</mt:setvartemplate>
+
+<mt:if error>
+    <mt:var error>
+<mt:else>
+<div id="tracer-wrapper">
+<mt:loop name="build_log">
+    <mt:if type eq="enter_build">
+        <div class="build-log-element<mt:if depth>-nest</mt:if>">
+    <mt:elseif type eq="start_tokens">
+        <div class="tokens"></div>
+    <mt:elseif type eq="start_tokens_else">
+        <div class="tokens-else"></div>
+    <mt:elseif type eq="end_tokens">
+    <mt:elseif type eq="exit_build">
+        </div>
+    <mt:elseif type eq="diff_vars">
+        <div class="diff-vars"><mt:var var_diff></div>
+    <mt:elseif type eq="error">
+        <div class="error">ERROR: <mt:var out></div>
+    <mt:elseif type eq="pre">
+        <mt:if block>
+            <div class="block-tag<mt:if error> error</mt:if>">
+        <mt:else>
+            <div class="function-tag<mt:if error> error</mt:if>">
+        </mt:if>
+            <span class="tag-name">mt:<mt:var tag></span>
+            <mt:if args><span class="tag-args"><mt:var args encode_html="1"></span></mt:if> 
+    <mt:elseif type eq="post">
+        <mt:if block>
+            <mt:ignore>
+                <span class="block-output"><pre><mt:var out encode_html="1"></pre></span>
+            </mt:ignore>
+            <span class="tag-name">/mt:<mt:var tag></span>
+            <mt:if timing>
+                <span class="time-elapsed"><mt:var elapsed>&nbsp;/&nbsp;<mt:var elapsed_total></span>
+            </mt:if>
+            </div>
+        <mt:else>
+            <mt:if out>
+                <mt:unless include>
+                    <span class="function-output"><mt:var out encode_html="1"></span>
+                </mt:unless>
+            </mt:if>
+            <mt:if timing>
+                <span class="time-elapsed"><mt:var elapsed>&nbsp;/&nbsp;<mt:var elapsed_total></span>
+            </mt:if>
+            </div>
+        </mt:if>
+    <mt:elseif type eq="text">
+            <div class="plain-text"><pre><mt:var out encode_html="1"></pre></div>
+    </mt:if>
+</mt:loop>
+</div>
+<mt:if timing><div class="time-elapsed">total time: <mt:var total_time></div></mt:if>
+</mt:if>
+<mt:include name="include/footer.tmpl">
