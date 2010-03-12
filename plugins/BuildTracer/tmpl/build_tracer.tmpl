@@ -1,763 +1,31 @@
 <mt:setvarblock name="html_head" prepend="1">
-<style type="text/css">
-
-#tracer-wrapper {
-    border-width: 0 1px 1px 0;
-    border-style: solid;
-    border-color: #bb9;
-    margin: 0 0 12px 0;
-    overflow: hidden;
-}
-
-#tracer {
-}
-
-#tracer-control {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 120px;
-    background-color: #abc;
-    z-index: 100;
-}
-
-#control-wrapper {
-    width: 920px;
-    margin: 0 auto;
-}
-
-#control-contents {
-    width: 902px;
-    float: left;
-}
-
-#control-contents .widget-label {
-    display: none;
-}
-
-#control-contents .widget-header {
-    float: left;
-    width: 80px;
-    height: 115px;
-    border: 0;
-    margin: 0;
-}
-
-#control-contents .widget-header-inner {
-    float: left;
-    width: 80px;
-    height: 115px;
-}
-
-#control-contents .tab {
-    width: 78px;
-    height: 15px;
-    background-color: #abc;
-    display: block;
-    border: 1px solid #abc;
-    margin: 0 0 2px 0;
-    text-align: right;
-    line-height: 1.3;
-    z-index: 101;
-}
-
-#control-contents .tab:hover {
-    background-color: #789;
-}
-
-#control-contents .selected-tab {
-    border-width: 1px 0 1px 1px;
-    border-style: solid;
-    border-color: #fff;
-    background-color: #abc;
-    z-index: 200;
-}
-
-#control-contents .tab span {
-    padding: 0 3px 0 0;
-    color: #fff;
-}
-
-.control-switch {
-    border: 1px solid #fff;
-    width: 14px;
-    height: 14px;
-    text-align: center;
-}
-
-.control-switch:hover {
-    background-color: #789;
-    cursor: pointer;
-}
-
-#control-toggle {
-    float: left;
-}
-
-#control-toggle-switch {
-    color: #fff;
-}
-
-#control-switch-container {
-    float: right;
-    width: 16px;
-}
-
-#control-contents .widget-content {
-    margin: 0 0 2px 0;
-    height: 116px;
-    width: 820px;
-    float: left;
-    position: relative;
-    left: -1px;
-    border: 1px solid #fff;
-    z-index: 25;
-}
-
-#control-contents .widget-content-inner {
-    padding: 2px;
-    height: 112px;
-}
-
-#control-contents .control-panel {
-    height: 112px;
-    overflow: hidden;
-}
-
-#control-contents .control-panel-body {
-    height: 88px;
-    overflow-y: scroll;
-}
-
-#control-contents .control-panel-footer {
-    position: absolute;
-    height: 24px;
-    bottom: 0px;
-    width:100%;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-#control-contents .widget-content li {
-    display: block;
-    float: left;
-    width: 120px;
-    line-height: 13px;
-    overflow-x: hidden;
-    margin: 0 12px 2px 0;
-}
-
-.legend-block {
-    float: left;
-    margin-left: 10px;
-    width: 120px;
-}
-
-.legend-block ul {
-    margin: 0;
-}
-
-#info-misc {
-    width: 200px;
-    height: 110px;
-    float: left;
-}
-
-#info-switch {
-    width: 16px;
-    float: left;
-}
-
-#info-screen {
-    float: left;
-    width: 590px;
-    height: 110px;
-    overflow-y: scroll;
-    background: #fff;
-}
-
-#info-misc table {
-    width: 180px;
-}
-
-#info-vars table {
-    width: 500px;
-}
-
-#tracer-control th {
-    background-color: #bcd;
-    padding: 0 2px;
-    border-bottom: 1px solid #9ab;
-}
-
-#tracer-control td {
-    padding: 0 2px;
-    border-bottom: 1px solid #9ab;
-    overflow: hidden;
-}
-
-.new-var { background-color: #cce; }
-.gone-var { background-color: #ecc; }
-div.var-key { width: 90px; height: 15px; float: left; overflow: hidden; background-color: #bcd; border-bottom: 1px solid #9ab;}
-div.var-val { width: 100px; height: 15px; float: left; overflow: hidden; border-bottom: 1px solid #9ab;}
-/*
-                        ==========  Tracer Element Styles
-*/
-.build-log-element {
-    border-width: 1px 0 0 1px;
-    border-style: solid;
-    border-color: #b99;
-    background-color: #fff;
-}
-
-.build-log-element-nest {
-    border-width: 1px 0 0 1px;
-    border-style: solid;
-    border-color: #b99;
-    margin-left: 20px;
-    background-color: #fff;
-}
-
-.plain-text { color: #888; background-color: #fff; }
-.block-tag { background-color: #ccf; border-bottom: 1px solid #fff;}
-.function-tag { background-color: #beb; border-bottom: 1px solid #fff;}
-
-.tag-name { color: #944; font-weight: bold; margin: 0 3px 0 6px;}
-.tag-name a { color: #944; font-weight: bold; margin: 0 3px 0 6px;}
-.tag-name a:hover { text-decoration: underline;}
-.tag-args { color: #480; margin: 0 3px;}
-.function-output, .block-output {
-    display: inline;
-    color: #269;
-    font-style: italic;
-    margin: 0 3px;
-}
-
-.error { background-color: #f44;}
-
-.tokens {background-color: #77f; padding: 5px 0 0 0;}
-.tokens-else {background-color: #f77; padding: 5px 0 0 0;}
-.diff-new {color: #66c;}
-.diff-changed {color: #282;}
-.diff-gone {color: #c66;}
-.diff-vars {background-color: #ddb; }
-.diff-stash {background-color: #dbd; }
-.diff-section { border-bottom: 1px solid #fff; }
-.diff-section ul { margin: 0; }
-.diff-section ul li {display: inline; margin: 0 6px 0 6px; }
-.diff-value {color: #468; font-style: italic; }
-.time-elapsed {
-    font-size: 0.8em;
-    background-color: #fc8;
-    border: 1px solid #888;
-    padding: 0 3px 0 3px;
-    color: #888;
-}
-
-div.legend-box { margin: 0; padding: 0 10px 0 0; display: inline; min-width: 16px; }
-div.legend-line { margin: 0; padding: 0 10px 0 0; }
-pre.output {
-    display: inline;
-    font-family: 'Courier New','Courier',monospace;
-}
-
-.selected-log {
-    background-color: #dbc;
-}
-
-.selected-log-post {
-    background-color: #dcb;
-}
-
-</style>
-
+<link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/BuildTracer/styles/tracer.css" type="text/css" />
+<script type="text/javascript" src="<$mt:var name="static_uri"$>plugins/BuildTracer/js/build_tracer.js"></script>
 <script type="text/javascript">
-
 var BUILD_LOG = <mt:var log_json>;
-var TIMING    = <mt:var timing>;  
-
-function select_info(sel) {
-    if (sel == 'info-output')
-        var hide = getByID('info-vars');
-    else
-        var hide = getByID('info-output');
-    var show = getByID(sel);
-    DOM.addClassName(hide, 'hidden');
-    DOM.removeClassName(show, 'hidden');
-    
-}
-
-var HIDE_CONTROL = 0;
-function toggle_control_display(){
-    var c = document.getElementById('tracer-control');
-    var cc = document.getElementById('control-wrapper');
-    if (HIDE_CONTROL) {
-        c.style.width = '100%';
-        c.style.height = '120px';
-        cc.style.display = 'block';
-        document.getElementById('control-toggle-switch').innerHTML = 'c';
-    }
-    else {
-        c.style.width = '16px';
-        c.style.height = '16px';
-        cc.style.display = 'none';
-        document.getElementById('control-toggle-switch').innerHTML = 'o';
-    }
-    HIDE_CONTROL = !HIDE_CONTROL;
-}
-
-function show_tag_info(id){
-    var container = document.getElementById('control-contents');
-    MT.App.TabContainer.prototype['selectTab'](container, 'info');    
-    var log = BUILD_LOG[id];
-    var str =  '<div class="taginfo-misc"><table>';
-    str += '<tr><th>id: </th><td>' + log.id + '</td></tr>';
-    str += '<tr><th>tagname</th><td>' + log.tag + '</td></tr>';
-    if (TIMING)
-        str += '<tr><th>time</th><td>' + log.elapsed + '</td></tr>';
-    str += '</table></div>';
-    str += '<div class="taginfo-output"><pre>' + log.out + '</pre></div>';
-    getByID('tag-info').innerHTML = str;
-    
-}
-
-function get_current_vars(id){
-    var i = 0;
-    var varstash = new Object();
-    while (i<id) {
-        var log = BUILD_LOG[i++];
-        if (log.type != 'diff_vars')
-            continue;
-        for (var v in log.diff){
-            varstash[log.diff[v].name] = log.diff[v];
-        }
-    }
-    return varstash;
-}
-
-function vars_to_table(varlist) {
-    var out = '';
-    var i = 0;
-    for (var key in varlist) {
-        var v = varlist[key];
-        if ((!v['status'] || v['status'] == 'nla') && !v.exist) continue;
-        if (i % 3 == 0)
-            out += '<div class="var-table-line">';
-        out += '<div class="var-key">' + v.name + '</div><div class="var-val';
-        if (v['status']) {
-            if (v.status == 'new')
-                out += ' new-var';
-            else if (v.status == 'gone') {
-                out += ' gone-var';
-            }
-        }
-        out += '"> ';
-       
-        
-        var value = v.val;
-        if (value instanceof Object) {
-            value = value.toString();
-            value = value ? value : '<< ' + typeof v.val + ' >>';
-        }
-        out += value;
-        out += '</div>';
-        i++;
-        if (i % 3 == 0)
-            out += '</tr>';
-    }
-    if (i){ 
-        if (i % 3 == 1)
-            out += '</div>';
-    }
-    return out;
-}
-
-function diff_vars(old_vars, new_vars) {
-    var out = '';
-    var i = 0;
-    var result = new Object();
-    for (var key in new_vars) {
-        result[key] = new_vars[key];
-        result[key]['status'] = "new";
-    }
-    for (var key in old_vars) {
-        var v = old_vars[key];
-        if ( result[key] ) {
-            if (result[key].exist) {
-                if ( v.val == result[key].val )
-                    result[key]['status'] = 'same';
-            }
-            else {
-                if ( v.exist )
-                    result[key]['status'] = 'gone';
-                else 
-                    result[key]['status'] = 'nla';
-            }
-        }
-        else {
-            result[key] = v;
-            result[key]['status'] = 'gone';
-        }
-    }
-    return result;
-}
-
-var SELECTED_LOG_ID = 0;
-
-function select_log(id) {
-    var old_log = getByID('log-' + SELECTED_LOG_ID);
-    if (old_log) {
-        DOM.removeClassName(old_log, 'selected-log');
-    }
-    SELECTED_LOG_ID = id;
-    var new_log = getByID('log-' + id);
-    if (new_log) {
-        DOM.addClassName(new_log, 'selected-log');
-    }
-    show_log_info(id);
-}
-
-function jump_tag(id, with_scroll) {
-    var old_id = SELECTED_LOG_ID;
-    var new_id = id;
-    var step_types = { 'pre': 1,
-                       'post': 1,
-                       'text': 1, };
-    while (1) {
-        if (step_types[BUILD_LOG[new_id].type]) break;
-        new_id++;
-        if (new_id >= BUILD_LOG.length) return;
-    }
-    SELECTED_LOG_ID = new_id;
-
-    var old_dom = getByID('log-' + old_id);
-    var old_data = BUILD_LOG[old_id];
-    if (old_data) {
-        if (old_data.type == 'post')
-            DOM.removeClassName(getByID('log-' + old_data.pair_id), 'selected-log-post');
-        else
-            DOM.removeClassName(old_dom, 'selected-log');
-    }
-
-    var new_data = BUILD_LOG[new_id];
-    var new_dom = getByID('log-' + new_id);
-    if (new_data.type == 'post')
-        DOM.addClassName(getByID('log-' + new_data.pair_id), 'selected-log-post');
-    else
-        DOM.addClassName(new_dom, 'selected-log');
-    if (with_scroll)
-        window.scroll(0, new_dom.offsetTop - 220);
-    show_log_info(new_id);
-    getByID('info-vars').innerHTML = vars_to_table(diff_vars(get_current_vars(old_id), get_current_vars(new_id)));
-}
-
-function step_tag(direction) {
-    var reverse = direction == 'prev' ? 1 : 0;
-    var old_id = SELECTED_LOG_ID;
-    var new_id = old_id;
-    var step_types = { 'pre': 1,
-                       'post': 1,
-                       'text': 1, };
-    while (1) {
-        if (reverse) {
-            new_id--;
-            if (new_id < 0) return;
-        }
-        else {
-            new_id++;
-            if (new_id >= BUILD_LOG.length) return;
-        }
-        if (step_types[BUILD_LOG[new_id].type]) break;
-    }
-    SELECTED_LOG_ID = new_id;
-
-    var old_dom = getByID('log-' + old_id);
-    var old_data = BUILD_LOG[old_id];
-    if (old_data) {
-        if (old_data.type == 'post')
-            DOM.removeClassName(getByID('log-' + old_data.pair_id), 'selected-log-post');
-        else
-            DOM.removeClassName(old_dom, 'selected-log');
-    }
-
-    var new_data = BUILD_LOG[new_id];
-    var new_dom = getByID('log-' + new_id);
-    if (new_data.type == 'post')
-        DOM.addClassName(getByID('log-' + new_data.pair_id), 'selected-log-post');
-    else
-        DOM.addClassName(new_dom, 'selected-log');
-    window.scroll(0, new_dom.offsetTop - 220);
-    show_log_info(new_id);
-    getByID('info-vars').innerHTML = vars_to_table(diff_vars(get_current_vars(old_id), get_current_vars(new_id)));
-}
-
-function table_line( head, content ) {
-    return '<tr><th>' + head + '</th><td>' + content + '</td></tr>';
-}
-
-function show_log_info(id){
-    var container = document.getElementById('control-contents');
-    MT.App.TabContainer.prototype['selectTab'](container, 'info');    
-    var log = BUILD_LOG[id];
-    var misc = '';
-    var out = '';
-    switch(log.type) {
-        case 'enter_build':
-            out += 'enter build';
-            break;
-        case 'start_tokens':
-            out += 'tokens';
-            break;
-        case 'start_tokens_else':
-            out += 'tokens else';
-            break;
-        case 'end_tokens':
-            out += 'tokens';
-            break;
-        case 'exit_build':
-            out += 'exit build';
-            break;
-        case 'diff_vars':
-            out += 'diff var';
-            break;
-        case 'diff_stash':
-            out += 'diff stash';
-            break;
-        case 'error':
-            misc += table_line('kind', 'error');
-            break;
-        case 'pre':
-            if (log.block) {
-                misc += table_line('kind', 'pre block');
-            }
-            else {
-                misc += table_line('kind', 'pre function');
-            }
-            <mt:if buildtracer_debug>misc += table_line('id', log.id);</mt:if>
-            misc += table_line('tagname', log.tag);
-            if (log.args) {
-                misc += table_line('args', log.args);
-            }
-            break;
-        case 'post':
-            misc += table_line('kind', 'post proccess');
-            var pair = BUILD_LOG[log.pair_id];
-            misc += table_line('tagname', pair.tag);
-            if (TIMING)
-                misc += table_line('elapsed', log.elapsed);
-            out += '<pre>' + log.out + '</pre>';
-            break;
-        case 'text':
-            misc += table_line('kind', 'text');
-            out += '<pre>' + log.out + '</pre>';
-            break;
-        default:
-            break;
-    }
-    if (misc) misc = '<table>' + misc + '</table>';
-    getByID('info-misc').innerHTML = misc;
-    getByID('info-output').innerHTML = out;
-}
-
-function var_diff(log){
-
-}
-
-function stash_diff(log){
-
-}
-
-function print_tracer(loglist) {
-    var canvas = getByID('tracer');
-    var out = '';
-    for (var i in loglist) {
-        var log = loglist[i];
-        switch(log.type) {
-            case 'enter_build':
-                out += '<div class="build-log-element';
-                if (log.depth)
-                    out += '-nest';
-                out += '">';
-                break;
-            case 'start_tokens':
-                out += '<div class="tokens"></div>';
-                break;
-            case 'start_tokens_else':
-                out += '<div class="tokens-else"></div>';
-                break;
-            case 'end_tokens':
-                break;
-            case 'exit_build':
-                out += '</div>';
-                break;
-            case 'diff_vars':
-/*
-                out += '<div class="diff-section diff-vars">';
-                out += var_diff(log);
-                out += '</div>';
-*/
-                break;
-            case 'diff_stash':
-/*
-                out += '<div class="diff-section diff-stash">';
-                out += stash_diff(log);
-                out += '</div>';
-*/
-                break;
-            case 'error':
-                out += '<div class="error">ERROR: <mt:var out></div>';
-                break;
-            case 'pre':
-                out += '<div id="log-';
-                out += log.id;
-                out += '" class="'
-                if (log.error)
-                    out += 'error ';
-                if (log.block) {
-                    out += 'block-tag';
-                }
-                else {
-                    out += 'function-tag';
-                }
-                out += '">';
-                out += '<span class="tag-name"><a href="javascript:jump_tag(';
-                out += log.id;
-                out += ', 0)">mt:';
-                out += log.tag;
-                out += '</a></span>';
-                if (log.args) {
-                    out += '<span class="tag-args">';
-                    out += log.args;
-                    out += '</span>';
-                }
-                break;
-            case 'post':
-                if (log.block) {
-                    out += '<span id="log-';
-                    out += log.id;
-                    out += '" class="block-output">';
-                    if (log.trimed_out) {
-                        out += log.trimed_out;
-                    }
-                    else {
-                        out += '(no output)';
-                    }
-                    out += '</span>';
-                    out += '<span class="tag-name">/mt:';
-                    out += log.tag;
-                    out += '</span>';
-                    if (TIMING) {
-                        out += '<span class="time-elapsed">';
-                        out += log.elapsed;
-                        out += '&nbsp;/&nbsp;';
-                        out += log.elapsed_total;
-                        out += '</span>';
-                    }
-                    out += '</div>';
-                }
-                else {
-                    out += '<span id="log-';
-                    out += log.id;
-                    out += '" class="function-output">';
-                    if (log.trimed_out) {
-                        out += log.trimed_out;
-                    }
-                    else {
-                        out += '(no output)';
-                    }
-                    out += '</span>';
-                    if (TIMING) {
-                        out += '<span class="time-elapsed">';
-                        out += log.elapsed;
-                        out += '&nbsp;/&nbsp;';
-                        out += log.elapsed_total;
-                        out += '</span>';
-                    }
-                    out += '</div>';
-                }
-                break;
-            case 'text':
-                out += '<div id="log-';
-                out += log.id;
-                out += '" class="plain-text"><pre>'
-                out += log.out;
-                out += '</pre></div>'
-                break;
-            default:
-                break;
-        }
-    }
-    canvas.innerHTML = out;
-}
-
-function print_output(loglist) {
-    var canvas = getByID('tracer');
-    var out = '';
-    var len = loglist.length;
-    var i = 0;
-    while ( i < len) {
-        var log = loglist[i];
-        switch(log.type) {
-            case 'error':
-                out += '<div class="error">ERROR: <mt:var out></div>';
-                break;
-            case 'pre':
-                if (log.block) {
-                    out += '<pre class="output block-tag block-output';
-                    if (log.error)
-                        out += ' error';
-                    out += '">';
-                }
-                else {
-                    out += '<pre class="output function-tag function-output';
-                    if (log.error)
-                        out += ' error';
-                    out += '">';
-               }
-                out += '<a href="javascript:show_tag_info(';
-                out += log.id;
-                out += ')">';
-                out += log.out || '-';
-                out += '</a></pre>';
-                i = log.pair_id;
-                break;
-            case 'text':
-                out += '<pre class="output plain-text">'
-                out += log.out;
-                out += '</pre>'
-                break;
-            default:
-                break;
-        }
-        i++;
-    }
-    canvas.innerHTML = out;
-}
+var TIMING = <mt:var timing>; 
 
 TC.attachLoadEvent( function() {
     print_tracer(BUILD_LOG);
 });
-
 </script>
-
 
 </mt:setvarblock>
 
 <mt:setvarblock control>
 <div id="tracer-control">
-    <div id="control-toggle" class="control-switch" onclick="toggle_control_display()"><span id="control-toggle-switch">c</span></div>
+    <div id="control-toggle" class="control-switch" onclick="toggle_control_display()"></div>
     <div id="control-wrapper">
     <mtapp:widget id="control-contents" class="widget control-widget" tabbed="1" label="<__trans phrase="tracer control">" can_close="0">
         <mt:setvarblock name="widget_header"><ul class="tabs">
             <li id="fileinfo-tab" class="tab selected-tab" mt:tab="fileinfo" mt:command="select-tab"><a href="javascript:void(0)"><span><__trans phrase="File Info"></span></a></li>
             <li id="info-tab" class="tab" mt:tab="info" mt:command="select-tab"><a href="javascript:void(0)"><span><__trans phrase="Info"></span></a></li>
+            <li id="options-tab" class="tab" mt:tab="options" mt:command="select-tab"><a href="javascript:void(0)"><span><__trans phrase="Options"></span></a></li>
             <li id="legend-tab" class="tab" mt:tab="legend" mt:command="select-tab"><a href="javascript:void(0)"><span><__trans phrase="Legend"></span></a></li>
 
 <mt:if buildtracer_debug>
             <li id="trace-vars-tab" class="tab" mt:tab="trace-vars" mt:command="select-tab"><a href="javascript:void(0)"><span><__trans phrase="Trace Vars"></span></a></li>
             <li id="trace-stash-tab" class="tab" mt:tab="trace-stash" mt:command="select-tab"><a href="javascript:void(0)"><span><__trans phrase="Trace Stash"></span></a></li>
-            <li id="options-tab" class="tab" mt:tab="options" mt:command="select-tab"><a href="javascript:void(0)"><span><__trans phrase="Options"></span></a></li>
 <li id="debug-tab" class="tab" mt:tab="debug" mt:command="select-tab"><a href="javascript:void(0)"><span><__trans phrase="Debug"></span></a></li>
 </mt:if>
 
@@ -781,14 +49,19 @@ TC.attachLoadEvent( function() {
             <div id="tag-info">
                 <div id="info-misc"></div>
                 <div id="info-screen">
-                    <div id="info-output">output</div>
-                    <div id="info-vars" class="hidden">vars</div>
+                    <div id="info-vars">vars</div>
+                    <div id="info-output" class="hidden">output</div>
                 </div>
                 <div id="info-switch">
-                    <div class="control-switch" onclick="select_info('info-output')">o</div>
-                    <div class="control-switch" onclick="select_info('info-vars')">v</div>
+                    <div id="button-info-var" class="control-switch control-switch-selected" onclick="select_info('info-vars')"></div>
+                    <div id="button-info-output" class="control-switch" onclick="select_info('info-output')"></div>
                 </div>
             </div>
+        </div>
+        <div id="options-panel" class="control-panel-body hidden" mt:tab-content="options">
+            <ul>
+                    <li><a href="javascript:window.location='<mt:AdminCGIPath><mt:AdminScript>?__mode=build_tracer&blog_id=<mt:var blog_id>&url=' + (location.href);">bookmarklet</a></li>
+            </ul>
         </div>
 
 
@@ -812,17 +85,6 @@ TC.attachLoadEvent( function() {
                     <mt:loop stashstock>
                         <li><label for="trace_stash"><input type="checkbox" name="trace_stash" value="<mt:var stash_name>" <mt:if stocked>checked="checked" </mt:if>/><mt:var stash_name></label></li>
                     </mt:loop>
-                </ul>
-                <div class="control-panel-footer"><input type="submit" /></div>
-            </div>
-            <div id="options-panel" class="control-panel-body hidden" mt:tab-content="options">
-                <ul>
-                    <mt:if can_timing>
-                        <li><input type="checkbox" name="timing" value="1"<mt:if timing> checked="checked"</mt:if> /><label for="timing">show proccess time</label></li>
-                    <mt:else>
-                        <li><__trans phrase="cannot time: Time::HiRes required"></li>
-                    </mt:if>
-                        <li><a href="javascript:window.location='<mt:AdminCGIPath><mt:AdminScript>?__mode=build_tracer&blog_id=<mt:var blog_id>&url=' + (location.href);">bookmarklet</a></li>
                 </ul>
                 <div class="control-panel-footer"><input type="submit" /></div>
             </div>
@@ -902,12 +164,18 @@ TC.attachLoadEvent( function() {
                 <a href="javascript:print_tracer(BUILD_LOG)">build</a>
                 <a href="javascript:print_output(BUILD_LOG)">output</a>
             </div>
+                    <mt:if can_timing>
+                        <input type="checkbox" name="timing" value="1"<mt:if timing> checked="checked"</mt:if> /><label for="timing">show proccess time</label>
+                    <mt:else>
+                        <__trans phrase="cannot time: Time::HiRes required">
+                    </mt:if>
         </mt:if>
     </mtapp:widget>
     <div id="control-switch-container">
-        <div class="control-switch" onclick="jump_tag(0,1)"> || </div>
-        <div class="control-switch" onclick="step_tag('prev')"> < </div>
-        <div class="control-switch" onclick="step_tag('next')"> > </div>
+        <div id="button-go-auto" class="control-switch" onclick="toggle_autowalk()"></div>
+        <div id="button-go-head" class="control-switch" onclick="jump_tag(0,1)"></div>
+        <div id="button-go-prev" class="control-switch" onclick="step_tag('prev')"></div>
+        <div id="button-go-next" class="control-switch" onclick="step_tag('next')"></div>
     </div>
     </div>
 </div>
@@ -919,4 +187,6 @@ TC.attachLoadEvent( function() {
     <div id="tracer">
     </div>
 </div>
+<div class="hidden" id="bt_popup"></div>
 <mt:include name="include/footer.tmpl">
+
