@@ -183,6 +183,9 @@ our $IGNORE_ERROR;
 our %VAR_STOCK;
 our %LAST_VAR;
 our @TRACE_VARS;
+our %STASH_STOCK;
+our %LAST_STASH;
+our @TRACE_STASH;
 our ($TIMING, $START_TIME, $TOTAL_TIME);
 
 sub build_log {
@@ -195,6 +198,13 @@ sub build_log {
     foreach my $v (keys %$vars){
         $VAR_STOCK{$v} = { 'var_name' => $v };
     }
+
+    diff_stash($ctx);
+    my $stash = $ctx->{__stash};
+    foreach my $s (keys %$stash) {
+        $STASH_STOCK{$s} = { 'stash_name' => $s };
+    }
+    $log->{id} = scalar @BUILD_LOG;
     push @BUILD_LOG, $log;
 }
 
@@ -246,6 +256,55 @@ sub diff_vars {
     }
 }
 
+sub diff_stash {
+    my $ctx = shift;
+    my (@new_stash, @changed_stash, @gone_stash);
+    my $stash = $ctx->{__stash};
+    foreach my $s (@TRACE_STASH) {
+        if( exists $LAST_STASH{$s} ) {
+            my $old = $LAST_STASH{$s};
+            if ( exists $stash->{$s} ) {
+                my $new = $stash->{$s};
+                if ($old ne $new) {
+                    push @changed_stash, {
+                        stashname => $s,
+                        old       => $old,
+                        new       => $new,
+                    };
+                    $LAST_STASH{$s} = $new;
+                }
+            }
+            else {
+                push @gone_stash, {
+                    stashname => $s,
+                    old       => $old,
+                };
+                delete $LAST_STASH{$s};
+            }
+        }
+        else {
+            if ( exists $stash->{$s} ) {
+                my $new = $stash->{$s};
+                push @new_stash, {
+                    stashname => $s,
+                    new       => $new,
+                };
+                $LAST_STASH{$s} = $new;
+            }
+        } 
+    }
+
+    if ( scalar @new_stash || scalar @changed_stash || scalar @gone_stash ) {
+        push @BUILD_LOG, { 
+            'type'         => 'diff_stash',
+            'new_stash'     => \@new_stash,
+            'changed_stash' => \@changed_stash,
+            'gone_stash'    => \@gone_stash,
+        };
+    }
+}
+
+#base on MT::Builder::build. taken from MTOS4.1 stable. 
 sub psuedo_builder {
     my $build = shift;
     my($ctx, $tokens, $cond) = @_;
@@ -477,6 +536,7 @@ sub trace {
     my $can_timing = $@ ? 0 : 1;
     $TIMING = $app->param('timing') && $can_timing;
     @TRACE_VARS = $app->param('trace_vars');
+    @TRACE_STASH = $app->param('trace_stash');
 
     require MT::FileInfo;
     my $fi = MT::FileInfo->load({'url' => $url});
@@ -487,9 +547,12 @@ sub trace {
     my $error;
     $IGNORE_ERROR = 1;
     {
+        require MT::Builder;
+        require MT::FileMgr::Local;
         require MT::WeblogPublisher;
-        my $pub = MT::WeblogPublisher->new;
         local *MT::Builder::build = \&psuedo_builder;
+        local *MT::FileMgr::Local::content_is_updated = sub { 0 };
+        my $pub = MT::WeblogPublisher->new;
         $pub->rebuild_from_fileinfo($fi)
             or $error = $pub->errstr;
     }
@@ -500,7 +563,11 @@ sub trace {
     foreach my $v (@TRACE_VARS) {
         $VAR_STOCK{$v}->{stocked} = 1;
     }
+    foreach my $s (@TRACE_STASH) {
+        $STASH_STOCK{$s}->{stocked} = 1;
+    }
     $tmpl->param('varstock' => [ sort { $a->{var_name} cmp $b->{var_name} } values %VAR_STOCK ]);
+    $tmpl->param('stashstock' => [ sort { $a->{stash_name} cmp $b->{stash_name} } values %STASH_STOCK ]);
     $tmpl->param('template_text' => $ft->text );
     $tmpl->param('tmpl_name' => $ft->name );
     $tmpl->param('tmpl_id' => $ft->id );
