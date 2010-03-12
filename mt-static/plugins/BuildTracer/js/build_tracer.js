@@ -12,7 +12,7 @@ function select_info(sel) {
     var show = getByID(sel);
     DOM.addClassName(hide, 'hidden');
     DOM.removeClassName(show, 'hidden');
-    
+
 }
 
 var HIDE_CONTROL = 0;
@@ -36,7 +36,7 @@ function toggle_control_display(){
 
 function show_tag_info(id){
     var container = document.getElementById('control-contents');
-    MT.App.TabContainer.prototype['selectTab'](container, 'info');    
+    MT.App.TabContainer.prototype['selectTab'](container, 'info');
     var log = BUILD_LOG[id];
     var str =  '<div class="taginfo-misc"><table>';
     str += '<tr><th>id: </th><td>' + log.id + '</td></tr>';
@@ -46,7 +46,7 @@ function show_tag_info(id){
     str += '</table></div>';
     str += '<div class="taginfo-output"><pre>' + log.out + '</pre></div>';
     getByID('tag-info').innerHTML = str;
-    
+
 }
 
 var CURRENT_VARS;
@@ -97,7 +97,7 @@ function vars_to_table(varlist) {
         if ((!v['status'] || v['status'] == 'nla') && !v.exist) continue;
         var div_key = document.createElement( "div" );
         DOM.addClassName(div_key, 'var-key');
-        div_key.innerHTML = v.name; 
+        div_key.innerHTML = v.name;
         var div_val = document.createElement( "div" );
         DOM.addClassName(div_val, 'var-val');
         if (v['status']) {
@@ -140,7 +140,7 @@ function diff_vars(old_vars, new_vars) {
             else {
                 if ( v.exist )
                     result[key]['status'] = 'gone';
-                else 
+                else
                     result[key]['status'] = 'nla';
             }
         }
@@ -156,7 +156,7 @@ var SELECTED_LOG_ID = 0;
 
 function select_tag(id) {
     var container = document.getElementById('control-contents');
-    MT.App.TabContainer.prototype['selectTab'](container, 'info');    
+    MT.App.TabContainer.prototype['selectTab'](container, 'info');
     jump_tag(id,0);
 }
 
