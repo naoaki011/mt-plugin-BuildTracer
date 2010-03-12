@@ -1,6 +1,11 @@
-0.4
-
 0.5
+    * avoids skipinvalid JSON death (from CMS.pm):
+    <     my $log_json = JSON::objToJson($log, {skipinvalid => 1});
+    --- is now  
+    >     my $log_json = JSON::objToJson($log);
+    
+    
+0.4
 
 0.31 (2008-02-24)
 
