@@ -1,5 +1,8 @@
 <mt:setvarblock name="html_head" prepend="1">
 <link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/BuildTracer/styles/tracer.css" type="text/css" />
+<mt:if name="mt_version" ge="5.0">
+<link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/BuildTracer/styles/tracer-v5.css" type="text/css" />
+</mt:if>
 <script type="text/javascript" src="<$mt:var name="static_uri"$>plugins/BuildTracer/js/build_tracer.js"></script>
 <script type="text/javascript">
 var BUILD_LOG = <mt:var log_json>;

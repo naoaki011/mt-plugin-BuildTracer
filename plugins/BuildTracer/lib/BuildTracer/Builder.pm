@@ -199,6 +199,7 @@ sub psuedo_builder {
                 $uncompiled = $t->[3];
             }
             my($h, $type) = $ctx->handler_for($t->[0]);
+            $h = MT->handler_to_coderef($h) unless ref $h; ## For MT5
             if ($h) {
                 my $start;
                 if ($MT::DebugMode & 8) {
