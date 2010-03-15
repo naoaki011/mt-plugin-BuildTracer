@@ -173,8 +173,10 @@ sub trace {
 
     my $error;
     {
+        no warnings 'redefine'; ## maybe I know what I'm doing.
         BuildTracer::Builder->init( {'no_timing' => !$timing, });
         local *MT::Builder::build = BuildTracer::Builder->builder;
+        # build from fileinfo, without update the *REAL* file.
         local *MT::FileMgr::Local::content_is_updated = sub { 0 };
         my $pub = MT::WeblogPublisher->new;
         $pub->rebuild_from_fileinfo($fi)
