@@ -1,3 +1,7 @@
+0.5.2 (2010-07-20)
+
+    * Corrected a problem in BuildTracer::CMS which can result in the following error "Can't call method &quot;name&quot; on an undefined value at ~/plugins/BuildTracer/lib/BuildTracer/CMS.pm line 42" when there is a mismatch between mt_fileinfo and mt_template rows. (Thanks dphillips.)
+
 0.5.1
 
     * Clean up code formatting.

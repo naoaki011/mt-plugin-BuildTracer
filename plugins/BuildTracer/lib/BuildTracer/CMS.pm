@@ -42,7 +42,9 @@ sub list_fileinfo {
         push @indexes, {
             'tmpl_name' => $tmpl->name,
             'url' => $fi->url,
-        };
+        } if $tmpl;     ### Need to skip situations where fileinfo records exist
+                        ### but corresponding templates do not, otherwise an
+                        ### error occurs.
     }
 
     my @data;

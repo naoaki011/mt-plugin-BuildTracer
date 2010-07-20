@@ -19,7 +19,7 @@ use MT::Plugin;
 
 use vars qw($PLUGIN_NAME $VERSION);
 $PLUGIN_NAME = 'BuildTracer';
-$VERSION = '0.5.1';
+$VERSION = '0.5.2';
 my $plugin = new MT::Plugin::BuildTracer({
     name => $PLUGIN_NAME,
     version => $VERSION,
