@@ -1,7 +1,13 @@
 <mt:setvarblock name="page_title"><__trans phrase="File Info"></mt:setvarblock>
-
-<mt:setvarblock name="related_content">
+<mt:if name="mt_version" ge="5.0">
+<mt:setvarblock name="html_head" prepend="1">
+<link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/BuildTracer/styles/finfo-v5.css" type="text/css" />
+</mt:setvarblock>
+    <mt:setvar name="index_link" value="<__trans phrase="indexes">">
+<mt:else>
     <mt:setvarblock name="index_link"><a href="<mtapp:link mode="list_fileinfo">"><__trans phrase="indexes"></a></mt:setvarblock>
+</mt:if>
+<mt:setvarblock name="related_content">
     <mtapp:widget
         id="indexes"
         label="$index_link">
