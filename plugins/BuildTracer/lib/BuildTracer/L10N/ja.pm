@@ -20,15 +20,15 @@ use vars qw( %Lexicon );
 
 %Lexicon = (
     'description of BuildTracer' => 'BuildTracerの説明',
-#    'tracer control' => 'tracer control',
-#    'File Info' => 'File Info',
-#    'Legend' => 'Legend',
+    'tracer control' => 'tracer control',
+    'File Info' => 'File Info',
+    'Legend' => 'Legend',
     'Return to List' => 'リストに戻る',
     'indexes' => 'インデックス',
-    'individuals' => 'ブログ記事',
+    'individuals' => '記事',
     'archives' => 'アーカイブ',
-#    'Showing Fileinfos of Template: [_1]' => 'Showing Fileinfos of Template: [_1]',
-    'sorry, no fileinfos.' => 'File Infoがありませんでした。',
+    'Showing Fileinfos of Template: [_1]' => '[_1] テンプレートの Fileinfo 一覧',
+    'sorry, no fileinfos.' => 'Fileinfo がありませんでした。',
 );
 
 1;
