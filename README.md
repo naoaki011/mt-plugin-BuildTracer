@@ -14,6 +14,7 @@ and shows how long each tag takes to publish in an individual template.
 
 ## Versions
 
+ * 0.5.3 may works with MT6b1.
  * 0.5.2 may works with MT5.1(tested with trunk code.).
  * 0.5.1 works with MT5.0, 4.3, MT 4.261, MT 4.25, and MT 4.24.
  * 0.5 works with MT 4.3, MT 4.261, MT 4.25, and MT 4.24.
