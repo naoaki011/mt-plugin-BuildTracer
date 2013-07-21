@@ -24,10 +24,11 @@ use vars qw( %Lexicon );
     'File Info' => 'File Info',
     'Legend' => 'Legend',
     'Return to List' => 'リストに戻る',
+    'index templates' => 'インデックステンプレート',
     'indexes' => 'インデックス',
     'individuals' => '記事',
     'archives' => 'アーカイブ',
-    'Showing Fileinfos of Template: [_1]' => '[_1] テンプレートの Fileinfo 一覧',
+    'Showing Fileinfos of Template: [_1]' => '[_1] の Fileinfo 一覧',
     'sorry, no fileinfos.' => 'Fileinfo がありませんでした。',
 );
 

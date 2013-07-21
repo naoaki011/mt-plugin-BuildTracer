@@ -50,7 +50,7 @@ sub list_fileinfo {
     my @data;
     my $total;
     my $key_tmpl_name;
-    if ( $filter =~ /^\d+$/ ) {
+    if (( defined $filter ) && ( $filter =~ /^\d+$/ )) {
         my $tmpl_id = $filter;
         my $terms = { 'template_id' => $tmpl_id, };
         $total = MT::FileInfo->count( $terms );
@@ -89,7 +89,7 @@ sub list_fileinfo {
     else {
         $total = scalar @indexes;
         @data = @indexes;
-        $key_tmpl_name = 'index templates';
+        $key_tmpl_name = $plugin->translate( 'index templates' );
     }
 
     my @individuals = MT::Template->load({
